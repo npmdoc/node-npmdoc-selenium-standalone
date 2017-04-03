@@ -1,0 +1,604 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/vvo/selenium-standalone">selenium-standalone (v6.1.0)</a>
+</h1>
+<h4>installs a `selenium-standalone` command line to install and start a standalone selenium server</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.selenium-standalone">module selenium-standalone</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.selenium-standalone.install">
+            function <span class="apidocSignatureSpan">selenium-standalone.</span>install
+            <span class="apidocSignatureSpan">(opts, cb)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.selenium-standalone.start">
+            function <span class="apidocSignatureSpan">selenium-standalone.</span>start
+            <span class="apidocSignatureSpan">(opts, cb)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">selenium-standalone.</span>get_selenium_status_url</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.selenium-standalone.get_selenium_status_url">module selenium-standalone.get_selenium_status_url</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.selenium-standalone.get_selenium_status_url.getRunningProcessType">
+            function <span class="apidocSignatureSpan">selenium-standalone.get_selenium_status_url.</span>getRunningProcessType
+            <span class="apidocSignatureSpan">(seleniumArgs)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.selenium-standalone.get_selenium_status_url.getSeleniumStatusUrl">
+            function <span class="apidocSignatureSpan">selenium-standalone.get_selenium_status_url.</span>getSeleniumStatusUrl
+            <span class="apidocSignatureSpan">(seleniumArgs)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">selenium-standalone.get_selenium_status_url.</span>PROCESS_TYPES</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.selenium-standalone" id="apidoc.module.selenium-standalone">module selenium-standalone</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.selenium-standalone.install" id="apidoc.element.selenium-standalone.install">
+        function <span class="apidocSignatureSpan">selenium-standalone.</span>install
+        <span class="apidocSignatureSpan">(opts, cb)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function install(opts, cb) {
+  var total = 0;
+  var progress = 0;
+  var startedRequests = 0;
+  var expectedRequests;
+  var requestOpts = {followAllRedirects: true};
+
+  if (typeof opts === 'function') {
+    cb = opts;
+    opts = {};
+  }
+
+  var logger = opts.logger || noop;
+
+  if (!opts.baseURL) {
+    opts.baseURL = defaultConfig.baseURL;
+  }
+
+  if (!opts.version) {
+    opts.version = defaultConfig.version;
+  }
+
+  if (opts.drivers) {
+    // Merge in missing driver options for those specified
+    opts.drivers = mapValues(opts.drivers, function(config, name) {
+      return merge({}, defaultConfig.drivers[name], config);
+    });
+  } else {
+    opts.drivers = defaultConfig.drivers;
+  }
+
+  if (process.platform !== 'win32') {
+    delete opts.drivers.ie;
+  }
+  expectedRequests = Object.keys(opts.drivers).length + 1;
+
+  if (opts.proxy) {
+    requestOpts.proxy = opts.proxy;
+  }
+
+  opts.progressCb = opts.progressCb || noop;
+
+  logger('----------');
+  logger('selenium-standalone installation starting');
+  logger('----------');
+  logger('');
+
+  var fsPaths = computeFsPaths({
+    seleniumVersion: opts.version,
+    drivers: opts.drivers,
+    basePath: opts.basePath
+  });
+
+  var urls = computeDownloadUrls({
+    seleniumVersion: opts.version,
+    seleniumBaseURL: opts.baseURL,
+    drivers: opts.drivers
+  });
+
+  logInstallSummary(logger, fsPaths, urls);
+
+  var tasks = [
+    createDirs.bind(null, fsPaths),
+    download.bind(null, {
+      urls: urls,
+      fsPaths: fsPaths
+    }),
+    asyncLogEnd.bind(null, logger)
+  ];
+
+  if (fsPaths.chrome) {
+    tasks.push(chmodChromeDr.bind(null, fsPaths.chrome.installPath));
+  }
+
+  if (fsPaths.firefox) {
+    tasks.push(chmodChromeDr.bind(null, fsPaths.firefox.installPath));
+  }
+
+  async.series(tasks, function(err) {
+    cb(err, fsPaths);
+  });
+
+  function onlyInstallMissingFiles(opts, cb) {
+    async.waterfall([
+      checksum.bind(null, opts.to),
+      isUpToDate.bind(null, opts.from, requestOpts)
+    ], function (error, isLatest) {
+      if (error) {
+        return cb(error);
+      }
+
+      // File already exists. Prevent download/installation.
+      if (isLatest) {
+        logger('---');
+        logger('File from ' + opts.from + ' has already been downloaded');
+        expectedRequests -= 1;
+        return cb();
+      }
+
+      opts.installer.call(null, {
+        to: opts.to,
+        from: opts.from
+      }, cb);
+    });
+  }
+
+  function download(opts, cb) {
+    var installers = [{
+      installer: installSelenium,
+      from: opts.urls.selenium,
+      to: opts.fsPaths.selenium.downloadPath
+    }];
+
+    if (opts.fsPaths.chrome) {
+      installers.push({
+        installer: installChromeDr,
+        from: opts.urls.chrome,
+        to: opts.fsPaths.chrome.downloadPath
+      });
+    }
+
+    if (process.platform === 'win32' &amp;&amp; opts.fsPaths.ie) {
+      installers.push({
+        installer: installIeDr,
+        from: opts.urls.ie,
+        to: opts.fsPaths.ie.downloadPath
+      });
+    }
+
+    if (opts.fsPaths.firefox) {
+      installers.push({
+        installer: installFirefoxDr,
+        from: opts.urls.firefox,
+        to: opts.fsPaths.firefox.downloadPath
+      })
+    }
+
+    var steps = installers.map(function (opts) {
+      return onlyInstallMissingFiles.bind(null, opts);
+    });
+
+    async.parallel(steps, cb);
+  }
+
+  function installSelenium(opts, cb) {
+    getDownloadStream(opts.from, function(err, stream) {
+      if (err) {
+        return cb(err);
+      }
+
+      stream
+        .pipe(fs.createWriteStream(opts.to))
+        .once('error', cb.bind(null, new Error('Could not write to ' + opts.to)))
+        .once('finish', cb);
+    });
+  }
+
+  function installChromeDr(opts, cb) {
+    installZippedFile(opts.from, opts.to, cb);
+  }
+
+  function installIeDr(opts, cb) {
+    installZippedFile(opts.from, opts.to, cb);
+  }
+
+  function installFirefoxDr(opts, cb) {
+    // only windows build is a zip
+    if (path.extname(opts.from) === '.zip') {
+      installZippedFile(opts.from, opts.to, cb);
+    } else {
+      installGzippedFile(opts.from, opts.to, cb);
+    }
+  }
+
+  function installGzippedFile(from, to, cb) {
+    getDownlo ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+[lib/default-config.js](lib/default-config.js)
+
+### Example
+
+```js
+var selenium = require('selenium-standalone');
+
+selenium.<span class="apidocCodeKeywordSpan">install</span>({
+// check for more recent versions of selenium here:
+// https://selenium-release.storage.googleapis.com/index.html
+version: '3.0.1',
+baseURL: 'https://selenium-release.storage.googleapis.com',
+drivers: {
+  chrome: {
+    // check for more recent versions of chrome driver here:
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.selenium-standalone.start" id="apidoc.element.selenium-standalone.start">
+        function <span class="apidocSignatureSpan">selenium-standalone.</span>start
+        <span class="apidocSignatureSpan">(opts, cb)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function start(opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts;
+    opts = {};
+  }
+
+  if (!opts.javaArgs) {
+    opts.javaArgs = [];
+  }
+
+  if (!opts.seleniumArgs) {
+    opts.seleniumArgs = [];
+  }
+
+  if (!opts.version) {
+    opts.version = defaultConfig.version;
+  }
+
+  if (!opts.spawnCb) {
+    opts.spawnCb = noop;
+  }
+
+  if (opts.drivers) {
+    // Merge in missing driver options for those specified
+    opts.drivers = mapValues(opts.drivers, function(config, name) {
+      return merge({}, defaultConfig.drivers[name], config);
+    });
+  } else {
+    opts.drivers = defaultConfig.drivers;
+  }
+
+  var fsPaths = computeFsPaths({
+    seleniumVersion: opts.version,
+    drivers: opts.drivers,
+    basePath: opts.basePath
+  });
+
+  if (typeof cb !== 'function') {
+    throw new Error('You must provide a callback when starting selenium');
+  }
+
+  // programmatic use, did not give javaPath
+  if (!opts.javaPath) {
+    opts.javaPath = which.sync('java');
+  }
+
+<span class="apidocCodeCommentSpan">  /* Command to run selenium is build in the following order:
+      0) Java executable
+      1) System level properties
+      2) Jar binary
+      3) Selenium specific arguments
+
+     Example:
+       java -Dwebdriver.chrome.driver=./.selenium/chromedriver/2.27-x64-chromedriver \
+          -jar ./.selenium/selenium-server/3.0.1-server.jar \
+          -role hub
+   */
+</span>  var args = [];
+
+  if (fsPaths.chrome) {
+    args.push('-Dwebdriver.chrome.driver=' + fsPaths.chrome.installPath);
+  }
+
+  if (process.platform === 'win32' &amp;&amp; fsPaths.ie) {
+    args.push('-Dwebdriver.ie.driver=' + fsPaths.ie.installPath);
+  } else {
+    delete fsPaths.ie;
+  }
+
+  if (fsPaths.firefox) {
+    args.push('-Dwebdriver.gecko.driver=' + fsPaths.firefox.installPath);
+  }
+
+  args = args.concat(opts.javaArgs);
+
+  args = args.concat(['-jar', fsPaths.selenium.installPath]);
+
+  args = args.concat(opts.seleniumArgs);
+
+  checkPathsExistence(getInstallPaths(fsPaths), function(err) {
+    if (err) {
+      cb(err);
+      return;
+    }
+
+    var neverStarted = false;
+    var selenium = spawn(opts.javaPath, args, opts.spawnOptions);
+
+    opts.spawnCb(selenium);
+
+    selenium.on('exit', errorIfNeverStarted);
+
+    checkStarted(args, function started(err) {
+      process.nextTick(function() {
+        // Add empty handler to stdout and stderr so the buffers can be flushed
+        // otherwise the process would eat up memory for nothing and crash
+        // we add it here so that users can register their own listeners
+        if (selenium.stdout &amp;&amp; selenium.stderr) {
+          if (selenium.stdout.listeners('data').length === 0) {
+            selenium.stdout.on('data', noop);
+          }
+          if (selenium.stderr.listeners('data').length === 0) {
+            selenium.stderr.on('data', noop);
+          }
+        }
+      });
+
+      selenium.removeListener('exit', errorIfNeverStarted);
+
+      if (err) {
+        cb(err);
+        return;
+      }
+
+      if (!neverStarted) {
+        cb(null, selenium);
+      } // else ignore, callback has already been called in errorIfNeverStarted()
+    });
+
+    function errorIfNeverStarted(code) {
+      neverStarted = true;
+
+      var errorMsg;
+      if (code === 1) {
+        errorMsg = 'Selenium server did not start.\n';
+      } else {
+       errorMsg = 'Selenium exited before it could start\n';
+      }
+      errorMsg += 'Another Selenium process may already be running or your java version may be out of date.\n';
+
+      // TODO: Is there a way to get this info from the api?
+      // 3.x requires Java 8+, 2.47.0+ requires Java 7 - 7 is also end-of-life apparently ?
+      errorMsg += 'Be sure to check the official Selenium release notes for minimum required java version: https://raw.githubusercontent
+.com/SeleniumHQ/selenium/master/java/CHANGELOG\n';
+
+      cb(new Error(errorMsg));
+    }
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+`opts.progressCb(totalLength, progressLength, chunkLength)` will be called if provided with raw bytes length numbers about the current
+ download process. It is used by the command line to show a progress bar.
+
+`opts.logger` will be called if provided with some debugging information about the installation process.
+
+`cb(err)` called when install finished or errored.
+
+### selenium.<span class="apidocCodeKeywordSpan">start</span>([opts,] cb)
+
+`opts.drivers` map of drivers to run along with selenium standalone server, same
+as `selenium.install`.
+
+`opts.basePath` sets the base directory used to load the selenium standalone `.jar` and drivers, same as `selenium.install`.
+
+By default all drivers are loaded, you only control and change the versions or archs.
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.selenium-standalone.get_selenium_status_url" id="apidoc.module.selenium-standalone.get_selenium_status_url">module selenium-standalone.get_selenium_status_url</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.selenium-standalone.get_selenium_status_url.getRunningProcessType" id="apidoc.element.selenium-standalone.get_selenium_status_url.getRunningProcessType">
+        function <span class="apidocSignatureSpan">selenium-standalone.get_selenium_status_url.</span>getRunningProcessType
+        <span class="apidocSignatureSpan">(seleniumArgs)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">getRunningProcessType = function (seleniumArgs) {
+  var roleArg = seleniumArgs.indexOf('-role');
+  var role = (roleArg !== -1) ? seleniumArgs[roleArg + 1] : undefined;
+
+  if (roleArg === -1) return PROCESS_TYPES.STANDALONE;
+  else if (role === 'hub') return PROCESS_TYPES.GRID_HUB;
+  else if (role === 'node') return PROCESS_TYPES.GRID_NODE;
+  else return undefined;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+if (roleArg === -1) return PROCESS_TYPES.STANDALONE;
+else if (role === 'hub') return PROCESS_TYPES.GRID_HUB;
+else if (role === 'node') return PROCESS_TYPES.GRID_NODE;
+else return undefined;
+}
+
+exports.getSeleniumStatusUrl = function(seleniumArgs) {
+var processType = this.<span class="apidocCodeKeywordSpan">getRunningProcessType</span>(seleniumArgs);
+var portArg = seleniumArgs.indexOf('-port');
+var port = (portArg !== -1) ? seleniumArgs[portArg + 1] : undefined;
+var hostArg = seleniumArgs.indexOf('-host');
+var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : 'localhost';
+
+var statusURI = new URI('http://' + host);
+var nodeStatusAPIPath = '/wd/hub/status';
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.selenium-standalone.get_selenium_status_url.getSeleniumStatusUrl" id="apidoc.element.selenium-standalone.get_selenium_status_url.getSeleniumStatusUrl">
+        function <span class="apidocSignatureSpan">selenium-standalone.get_selenium_status_url.</span>getSeleniumStatusUrl
+        <span class="apidocSignatureSpan">(seleniumArgs)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">getSeleniumStatusUrl = function (seleniumArgs) {
+  var processType = this.getRunningProcessType(seleniumArgs);
+  var portArg = seleniumArgs.indexOf('-port');
+  var port = (portArg !== -1) ? seleniumArgs[portArg + 1] : undefined;
+  var hostArg = seleniumArgs.indexOf('-host');
+  var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : 'localhost';
+
+  var statusURI = new URI('http://' + host);
+  var nodeStatusAPIPath = '/wd/hub/status';
+  var hubStatusAPIPath = '/grid/api/hub';
+
+  switch (processType) {
+    case PROCESS_TYPES.STANDALONE:
+      statusURI.port(4444);
+      statusURI.path(nodeStatusAPIPath);
+      break;
+    case PROCESS_TYPES.GRID_HUB:
+      statusURI.port(4444);
+      statusURI.path(hubStatusAPIPath);
+      break;
+    case PROCESS_TYPES.GRID_NODE:
+      statusURI.port(5555);
+      statusURI.path(nodeStatusAPIPath);
+      break;
+    default:
+      throw 'ERROR: Trying to run selenium in an unknown way.';
+  }
+
+  // Running with a non-default port
+  if (portArg !== -1) {
+    statusURI.port(seleniumArgs[portArg + 1]);
+  }
+
+  return statusURI.toString();
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+module.exports = checkStarted;
+
+var request = require('request').defaults({json: true});
+var statusUrl = require('./get-selenium-status-url.js');
+
+function checkStarted(seleniumArgs, cb) {
+var retries = 0;
+var hub = statusUrl.<span class="apidocCodeKeywordSpan">getSeleniumStatusUrl</span>(seleniumArgs);
+// server has one minute to start
+var retryInterval = 200;
+var maxRetries = 60 * 1000 / retryInterval;
+
+function hasStarted() {
+  retries++;
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
