@@ -3,7 +3,7 @@
 
 [![NPM](https://nodei.co/npm/selenium-standalone.png?downloads=true)](https://www.npmjs.com/package/selenium-standalone)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-selenium-standalone/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-selenium-standalone_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-selenium-standalone/build..beta..travis-ci.org/apidoc.html)
+[![apidoc](https://npmdoc.github.io/node-npmdoc-selenium-standalone/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-selenium-standalone_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-selenium-standalone/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-selenium-standalone/build/screenCapture.npmPackageListing.svg)
 
