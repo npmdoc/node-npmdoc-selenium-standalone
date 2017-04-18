@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/vvo/selenium-standalone"
-
-    >selenium-standalone (v6.2.0)</a>
+    <a href="https://github.com/vvo/selenium-standalone">selenium-standalone (v6.2.0)</a>
 </h1>
 <h4>installs a `selenium-standalone` command line to install and start a standalone selenium server</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.selenium-standalone">module selenium-standalone</a><ol>
 
@@ -273,7 +266,7 @@
     return function(existsCb) {
       fs.exists(path, function(res) {
         if (res === false) {
-          existsCb(new Error(&#x27;Missing &#x27; + path));
+          existsCb(new Error('Missing ' + path));
           return;
         }
 
@@ -304,8 +297,8 @@
   function hasStarted() {
     retries++;
 
-    if (retries &#x3e; maxRetries) {
-      cb(new Error(&#x27;Unable to connect to selenium&#x27;));
+    if (retries &gt; maxRetries) {
+      cb(new Error('Unable to connect to selenium'));
       return;
     }
 
@@ -333,19 +326,19 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function computeDownloadUrls(opts, askedOpts) {
-  // 2.44.0 =&#x3e; 2.44
+  // 2.44.0 =&gt; 2.44
   // 2.44.0 would be `patch`, 2.44 `minor`, 2 `major` as per semver
 
   var downloadUrls = {
     selenium: util.format(
       urls.selenium,
       opts.seleniumBaseURL,
-      opts.seleniumVersion.replace(/(\d+\.\d+)\.\d/, &#x22;$1&#x22;),
+      opts.seleniumVersion.replace(/(\d+\.\d+)\.\d/, "$1"),
       opts.seleniumVersion
     )
   };
   if (opts.drivers.chrome) {
-    if (opts.drivers.chrome.version &#x3c; 2.23) {
+    if (opts.drivers.chrome.version &lt; 2.23) {
       mac32 = true;
     }
     downloadUrls.chrome = util.format(
@@ -359,7 +352,7 @@
     downloadUrls.ie = util.format(
       urls.ie,
       opts.drivers.ie.baseURL,
-      opts.drivers.ie.version.slice(0, opts.drivers.ie.version.lastIndexOf(&#x27;.&#x27;)),
+      opts.drivers.ie.version.slice(0, opts.drivers.ie.version.lastIndexOf('.')),
       getIeDriverArchitecture(opts.drivers.ie.arch),
       opts.drivers.ie.version
     );
@@ -393,37 +386,37 @@
   opts.basePath = opts.basePath || basePath;
   if (opts.drivers.chrome) {
     fsPaths.chrome = {
-      installPath: path.join(opts.basePath, &#x27;chromedriver&#x27;, opts.drivers.chrome.version + &#x27;-&#x27; + opts.drivers.chrome.arch + &#x27;-chromedriver
-&#x27;)
+      installPath: path.join(opts.basePath, 'chromedriver', opts.drivers.chrome.version + '-' + opts.drivers.chrome.arch + '-chromedriver
+')
     };
   }
   if (opts.drivers.ie) {
     fsPaths.ie = {
-      installPath: path.join(opts.basePath, &#x27;iedriver&#x27;, opts.drivers.ie.version + &#x27;-&#x27; + opts.drivers.ie.arch + &#x27;-IEDriverServer.
-exe&#x27;)
+      installPath: path.join(opts.basePath, 'iedriver', opts.drivers.ie.version + '-' + opts.drivers.ie.arch + '-IEDriverServer.
+exe')
     };
   }
 
   if (opts.drivers.firefox) {
     fsPaths.firefox = {
-      installPath: path.join(opts.basePath, &#x27;geckodriver&#x27;, opts.drivers.firefox.version + &#x27;-&#x27; + opts.drivers.firefox.arch + &#x27;-geckodriver
-&#x27;)
+      installPath: path.join(opts.basePath, 'geckodriver', opts.drivers.firefox.version + '-' + opts.drivers.firefox.arch + '-geckodriver
+')
     };
   }
 
   fsPaths.selenium = {
-    installPath: path.join(opts.basePath, &#x27;selenium-server&#x27;, opts.seleniumVersion + &#x27;-server.jar&#x27;)
+    installPath: path.join(opts.basePath, 'selenium-server', opts.seleniumVersion + '-server.jar')
   };
 
   fsPaths = Object.keys(fsPaths).reduce(function computeDownloadPath(newFsPaths, name) {
     var downloadPath;
 
-    if (name === &#x27;selenium&#x27;) {
+    if (name === 'selenium') {
       downloadPath = newFsPaths[name].installPath;
-    } else if (name === &#x27;firefox&#x27; &#x26;&#x26; process.platform !== &#x27;win32&#x27;) {
-      downloadPath = newFsPaths[name].installPath + &#x27;.gz&#x27;;
+    } else if (name === 'firefox' &amp;&amp; process.platform !== 'win32') {
+      downloadPath = newFsPaths[name].installPath + '.gz';
     } else {
-      downloadPath = newFsPaths[name].installPath + &#x27;.zip&#x27;;
+      downloadPath = newFsPaths[name].installPath + '.zip';
     }
 
     newFsPaths[name].downloadPath = downloadPath;
@@ -445,7 +438,7 @@ exe&#x27;)
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function install(opts, cb) {
-  debug(&#x27;Install API called with&#x27;, opts);
+  debug('Install API called with', opts);
 
   var total = 0;
   var progress = 0;
@@ -453,7 +446,7 @@ exe&#x27;)
   var expectedRequests;
   var requestOpts = {followAllRedirects: true};
 
-  if (typeof opts === &#x27;function&#x27;) {
+  if (typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
@@ -477,7 +470,7 @@ exe&#x27;)
     opts.drivers = defaultConfig.drivers;
   }
 
-  if (process.platform !== &#x27;win32&#x27;) {
+  if (process.platform !== 'win32') {
     delete opts.drivers.ie;
   }
   expectedRequests = Object.keys(opts.drivers).length + 1;
@@ -488,10 +481,10 @@ exe&#x27;)
 
   opts.progressCb = opts.progressCb || noop;
 
-  logger(&#x27;----------&#x27;);
-  logger(&#x27;selenium-standalone installation starting&#x27;);
-  logger(&#x27;----------&#x27;);
-  logger(&#x27;&#x27;);
+  logger('----------');
+  logger('selenium-standalone installation starting');
+  logger('----------');
+  logger('');
 
   var fsPaths = computeFsPaths({
     seleniumVersion: opts.version,
@@ -539,8 +532,8 @@ exe&#x27;)
 
       // File already exists. Prevent download/installation.
       if (isLatest) {
-        logger(&#x27;---&#x27;);
-        logger(&#x27;File from &#x27; + opts.from + &#x27; has already been downloaded&#x27;);
+        logger('---');
+        logger('File from ' + opts.from + ' has already been downloaded');
         expectedRequests -= 1;
         return cb();
       }
@@ -567,7 +560,7 @@ exe&#x27;)
       });
     }
 
-    if (process.platform === &#x27;win32&#x27; &#x26;&#x26; opts.fsPaths.ie) {
+    if (process.platform === 'win32' &amp;&amp; opts.fsPaths.ie) {
       installers.push({
         installer: installIeDr,
         from: opts.urls.ie,
@@ -598,8 +591,8 @@ exe&#x27;)
 
       stream
         .pipe(fs.createWriteStream(opts.to))
-        .once(&#x27;error&#x27;, cb.bind(null, new Error(&#x27;Could not write to &#x27; + opts.to)))
-        .once(&#x27;finish&#x27;, cb);
+        .once('error', cb.bind(null, new Error('Could not write to ' + opts.to)))
+        .once('finish', cb);
     });
   }
 
@@ -613,7 +606,7 @@ exe&#x27;)
 
   function installFirefoxDr(opts, cb) {
     // only windows build is a zip
-    if (path.extname(opts.from) === &#x27;.zip&#x27;) {
+    if (path.extname(opts.from) === '.zip') {
       installZippedFile(opts.from, opts.to, cb);
     } else {
       installGzippedFile(opts.from, opts.to, cb);
@@ -624,13 +617,13 @@ exe&#x27;)
 ### Example
 
 ```js
-var selenium = require(&#x27;selenium-standalone&#x27;);
+var selenium = require('selenium-standalone');
 
 selenium.<span class="apidocCodeKeywordSpan">install</span>({
 // check for more recent versions of selenium here:
 // https://selenium-release.storage.googleapis.com/index.html
-version: &#x27;3.0.1&#x27;,
-baseURL: &#x27;https://selenium-release.storage.googleapis.com&#x27;,
+version: '3.0.1',
+baseURL: 'https://selenium-release.storage.googleapis.com',
 drivers: {
   chrome: {
     // check for more recent versions of chrome driver here:
@@ -662,9 +655,9 @@ drivers: {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function start(opts, cb) {
-  debug(&#x27;Start API called with&#x27;, opts);
+  debug('Start API called with', opts);
 
-  if (typeof opts === &#x27;function&#x27;) {
+  if (typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
@@ -700,13 +693,13 @@ drivers: {
     basePath: opts.basePath
   });
 
-  if (typeof cb !== &#x27;function&#x27;) {
-    throw new Error(&#x27;You must provide a callback when starting selenium&#x27;);
+  if (typeof cb !== 'function') {
+    throw new Error('You must provide a callback when starting selenium');
   }
 
   // programmatic use, did not give javaPath
   if (!opts.javaPath) {
-    opts.javaPath = which.sync(&#x27;java&#x27;);
+    opts.javaPath = which.sync('java');
   }
 
 <span class="apidocCodeCommentSpan">  /* Command to run selenium is build in the following order:
@@ -723,22 +716,22 @@ drivers: {
 </span>  var args = [];
 
   if (fsPaths.chrome) {
-    args.push(&#x27;-Dwebdriver.chrome.driver=&#x27; + fsPaths.chrome.installPath);
+    args.push('-Dwebdriver.chrome.driver=' + fsPaths.chrome.installPath);
   }
 
-  if (process.platform === &#x27;win32&#x27; &#x26;&#x26; fsPaths.ie) {
-    args.push(&#x27;-Dwebdriver.ie.driver=&#x27; + fsPaths.ie.installPath);
+  if (process.platform === 'win32' &amp;&amp; fsPaths.ie) {
+    args.push('-Dwebdriver.ie.driver=' + fsPaths.ie.installPath);
   } else {
     delete fsPaths.ie;
   }
 
   if (fsPaths.firefox) {
-    args.push(&#x27;-Dwebdriver.gecko.driver=&#x27; + fsPaths.firefox.installPath);
+    args.push('-Dwebdriver.gecko.driver=' + fsPaths.firefox.installPath);
   }
 
   args = args.concat(opts.javaArgs);
 
-  args = args.concat([&#x27;-jar&#x27;, fsPaths.selenium.installPath]);
+  args = args.concat(['-jar', fsPaths.selenium.installPath]);
 
   args = args.concat(opts.seleniumArgs);
 
@@ -749,29 +742,29 @@ drivers: {
     }
 
     var neverStarted = false;
-    debug(&#x27;Spawning Selenium Server process&#x27;, opts.javaPath, args);
+    debug('Spawning Selenium Server process', opts.javaPath, args);
     var selenium = spawn(opts.javaPath, args, opts.spawnOptions);
 
     opts.spawnCb(selenium);
 
-    selenium.on(&#x27;exit&#x27;, errorIfNeverStarted);
+    selenium.on('exit', errorIfNeverStarted);
 
     checkStarted(args, function started(err) {
       process.nextTick(function() {
         // Add empty handler to stdout and stderr so the buffers can be flushed
         // otherwise the process would eat up memory for nothing and crash
         // we add it here so that users can register their own listeners
-        if (selenium.stdout &#x26;&#x26; selenium.stderr) {
-          if (selenium.stdout.listeners(&#x27;data&#x27;).length === 0) {
-            selenium.stdout.on(&#x27;data&#x27;, noop);
+        if (selenium.stdout &amp;&amp; selenium.stderr) {
+          if (selenium.stdout.listeners('data').length === 0) {
+            selenium.stdout.on('data', noop);
           }
-          if (selenium.stderr.listeners(&#x27;data&#x27;).length === 0) {
-            selenium.stderr.on(&#x27;data&#x27;, noop);
+          if (selenium.stderr.listeners('data').length === 0) {
+            selenium.stderr.on('data', noop);
           }
         }
       });
 
-      selenium.removeListener(&#x27;exit&#x27;, errorIfNeverStarted);
+      selenium.removeListener('exit', errorIfNeverStarted);
 
       if (err) {
         cb(err);
@@ -788,16 +781,16 @@ drivers: {
 
       var errorMsg;
       if (code === 1) {
-        errorMsg = &#x27;Selenium server did not start.\n&#x27;;
+        errorMsg = 'Selenium server did not start.\n';
       } else {
-       errorMsg = &#x27;Selenium exited before it could start\n&#x27;;
+       errorMsg = 'Selenium exited before it could start\n';
       }
-      errorMsg += &#x27;Another Selenium process may already be running or your java version may be out of date.\n&#x27;;
+      errorMsg += 'Another Selenium process may already be running or your java version may be out of date.\n';
 
       // TODO: Is there a way to get this info from the api?
       // 3.x requires Java 8+, 2.47.0+ requires Java 7 - 7 is also end-of-life apparently ?
-      errorMsg += &#x27;Be sure to check the official Selenium release notes for minimum required java version: https://raw.githubusercontent
-.com/SeleniumHQ/selenium/master/java/CHANGELOG\n&#x27;;
+      errorMsg += 'Be sure to check the official Selenium release notes for minimum required java version: https://raw.githubusercontent
+.com/SeleniumHQ/selenium/master/java/CHANGELOG\n';
 
       cb(new Error(errorMsg));
     }
@@ -848,7 +841,7 @@ By default all drivers are loaded, you only control and change the versions or a
     return function(existsCb) {
       fs.exists(path, function(res) {
         if (res === false) {
-          existsCb(new Error(&#x27;Missing &#x27; + path));
+          existsCb(new Error('Missing ' + path));
           return;
         }
 
@@ -884,8 +877,8 @@ By default all drivers are loaded, you only control and change the versions or a
   function hasStarted() {
     retries++;
 
-    if (retries &#x3e; maxRetries) {
-      cb(new Error(&#x27;Unable to connect to selenium&#x27;));
+    if (retries &gt; maxRetries) {
+      cb(new Error('Unable to connect to selenium'));
       return;
     }
 
@@ -918,19 +911,19 @@ By default all drivers are loaded, you only control and change the versions or a
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function computeDownloadUrls(opts, askedOpts) {
-  // 2.44.0 =&#x3e; 2.44
+  // 2.44.0 =&gt; 2.44
   // 2.44.0 would be `patch`, 2.44 `minor`, 2 `major` as per semver
 
   var downloadUrls = {
     selenium: util.format(
       urls.selenium,
       opts.seleniumBaseURL,
-      opts.seleniumVersion.replace(/(\d+\.\d+)\.\d/, &#x22;$1&#x22;),
+      opts.seleniumVersion.replace(/(\d+\.\d+)\.\d/, "$1"),
       opts.seleniumVersion
     )
   };
   if (opts.drivers.chrome) {
-    if (opts.drivers.chrome.version &#x3c; 2.23) {
+    if (opts.drivers.chrome.version &lt; 2.23) {
       mac32 = true;
     }
     downloadUrls.chrome = util.format(
@@ -944,7 +937,7 @@ By default all drivers are loaded, you only control and change the versions or a
     downloadUrls.ie = util.format(
       urls.ie,
       opts.drivers.ie.baseURL,
-      opts.drivers.ie.version.slice(0, opts.drivers.ie.version.lastIndexOf(&#x27;.&#x27;)),
+      opts.drivers.ie.version.slice(0, opts.drivers.ie.version.lastIndexOf('.')),
       getIeDriverArchitecture(opts.drivers.ie.arch),
       opts.drivers.ie.version
     );
@@ -983,37 +976,37 @@ By default all drivers are loaded, you only control and change the versions or a
   opts.basePath = opts.basePath || basePath;
   if (opts.drivers.chrome) {
     fsPaths.chrome = {
-      installPath: path.join(opts.basePath, &#x27;chromedriver&#x27;, opts.drivers.chrome.version + &#x27;-&#x27; + opts.drivers.chrome.arch + &#x27;-chromedriver
-&#x27;)
+      installPath: path.join(opts.basePath, 'chromedriver', opts.drivers.chrome.version + '-' + opts.drivers.chrome.arch + '-chromedriver
+')
     };
   }
   if (opts.drivers.ie) {
     fsPaths.ie = {
-      installPath: path.join(opts.basePath, &#x27;iedriver&#x27;, opts.drivers.ie.version + &#x27;-&#x27; + opts.drivers.ie.arch + &#x27;-IEDriverServer.
-exe&#x27;)
+      installPath: path.join(opts.basePath, 'iedriver', opts.drivers.ie.version + '-' + opts.drivers.ie.arch + '-IEDriverServer.
+exe')
     };
   }
 
   if (opts.drivers.firefox) {
     fsPaths.firefox = {
-      installPath: path.join(opts.basePath, &#x27;geckodriver&#x27;, opts.drivers.firefox.version + &#x27;-&#x27; + opts.drivers.firefox.arch + &#x27;-geckodriver
-&#x27;)
+      installPath: path.join(opts.basePath, 'geckodriver', opts.drivers.firefox.version + '-' + opts.drivers.firefox.arch + '-geckodriver
+')
     };
   }
 
   fsPaths.selenium = {
-    installPath: path.join(opts.basePath, &#x27;selenium-server&#x27;, opts.seleniumVersion + &#x27;-server.jar&#x27;)
+    installPath: path.join(opts.basePath, 'selenium-server', opts.seleniumVersion + '-server.jar')
   };
 
   fsPaths = Object.keys(fsPaths).reduce(function computeDownloadPath(newFsPaths, name) {
     var downloadPath;
 
-    if (name === &#x27;selenium&#x27;) {
+    if (name === 'selenium') {
       downloadPath = newFsPaths[name].installPath;
-    } else if (name === &#x27;firefox&#x27; &#x26;&#x26; process.platform !== &#x27;win32&#x27;) {
-      downloadPath = newFsPaths[name].installPath + &#x27;.gz&#x27;;
+    } else if (name === 'firefox' &amp;&amp; process.platform !== 'win32') {
+      downloadPath = newFsPaths[name].installPath + '.gz';
     } else {
-      downloadPath = newFsPaths[name].installPath + &#x27;.zip&#x27;;
+      downloadPath = newFsPaths[name].installPath + '.zip';
     }
 
     newFsPaths[name].downloadPath = downloadPath;
@@ -1040,30 +1033,30 @@ exe&#x27;)
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">getRunningProcessType = function (seleniumArgs) {
-  var roleArg = seleniumArgs.indexOf(&#x27;-role&#x27;);
+  var roleArg = seleniumArgs.indexOf('-role');
   var role = (roleArg !== -1) ? seleniumArgs[roleArg + 1] : undefined;
 
   if (roleArg === -1) return PROCESS_TYPES.STANDALONE;
-  else if (role === &#x27;hub&#x27;) return PROCESS_TYPES.GRID_HUB;
-  else if (role === &#x27;node&#x27;) return PROCESS_TYPES.GRID_NODE;
+  else if (role === 'hub') return PROCESS_TYPES.GRID_HUB;
+  else if (role === 'node') return PROCESS_TYPES.GRID_NODE;
   else return undefined;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 if (roleArg === -1) return PROCESS_TYPES.STANDALONE;
-else if (role === &#x27;hub&#x27;) return PROCESS_TYPES.GRID_HUB;
-else if (role === &#x27;node&#x27;) return PROCESS_TYPES.GRID_NODE;
+else if (role === 'hub') return PROCESS_TYPES.GRID_HUB;
+else if (role === 'node') return PROCESS_TYPES.GRID_NODE;
 else return undefined;
 }
 
 exports.getSeleniumStatusUrl = function(seleniumArgs) {
 var processType = this.<span class="apidocCodeKeywordSpan">getRunningProcessType</span>(seleniumArgs);
-var portArg = seleniumArgs.indexOf(&#x27;-port&#x27;);
+var portArg = seleniumArgs.indexOf('-port');
 var port = (portArg !== -1) ? seleniumArgs[portArg + 1] : undefined;
-var hostArg = seleniumArgs.indexOf(&#x27;-host&#x27;);
-var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : &#x27;localhost&#x27;;
+var hostArg = seleniumArgs.indexOf('-host');
+var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : 'localhost';
 
-var statusURI = new URI(&#x27;http://&#x27; + host);
-var nodeStatusAPIPath = &#x27;/wd/hub/status&#x27;;
+var statusURI = new URI('http://' + host);
+var nodeStatusAPIPath = '/wd/hub/status';
 ...</pre></li>
     </ul>
 
@@ -1078,14 +1071,14 @@ var nodeStatusAPIPath = &#x27;/wd/hub/status&#x27;;
     <ul>
     <li>description and source-code<pre class="apidocCodePre">getSeleniumStatusUrl = function (seleniumArgs) {
   var processType = this.getRunningProcessType(seleniumArgs);
-  var portArg = seleniumArgs.indexOf(&#x27;-port&#x27;);
+  var portArg = seleniumArgs.indexOf('-port');
   var port = (portArg !== -1) ? seleniumArgs[portArg + 1] : undefined;
-  var hostArg = seleniumArgs.indexOf(&#x27;-host&#x27;);
-  var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : &#x27;localhost&#x27;;
+  var hostArg = seleniumArgs.indexOf('-host');
+  var host = (hostArg !== -1) ? seleniumArgs[hostArg + 1] : 'localhost';
 
-  var statusURI = new URI(&#x27;http://&#x27; + host);
-  var nodeStatusAPIPath = &#x27;/wd/hub/status&#x27;;
-  var hubStatusAPIPath = &#x27;/grid/api/hub&#x27;;
+  var statusURI = new URI('http://' + host);
+  var nodeStatusAPIPath = '/wd/hub/status';
+  var hubStatusAPIPath = '/grid/api/hub';
 
   switch (processType) {
     case PROCESS_TYPES.STANDALONE:
@@ -1101,7 +1094,7 @@ var nodeStatusAPIPath = &#x27;/wd/hub/status&#x27;;
       statusURI.path(nodeStatusAPIPath);
       break;
     default:
-      throw &#x27;ERROR: Trying to run selenium in an unknown way.&#x27;;
+      throw 'ERROR: Trying to run selenium in an unknown way.';
   }
 
   // Running with a non-default port
@@ -1114,8 +1107,8 @@ var nodeStatusAPIPath = &#x27;/wd/hub/status&#x27;;
     <li>example usage<pre class="apidocCodePre">...
 module.exports = checkStarted;
 
-var request = require(&#x27;request&#x27;).defaults({json: true});
-var statusUrl = require(&#x27;./get-selenium-status-url.js&#x27;);
+var request = require('request').defaults({json: true});
+var statusUrl = require('./get-selenium-status-url.js');
 
 function checkStarted(seleniumArgs, cb) {
 var retries = 0;
@@ -1146,7 +1139,7 @@ function hasStarted() {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function install(opts, cb) {
-  debug(&#x27;Install API called with&#x27;, opts);
+  debug('Install API called with', opts);
 
   var total = 0;
   var progress = 0;
@@ -1154,7 +1147,7 @@ function hasStarted() {
   var expectedRequests;
   var requestOpts = {followAllRedirects: true};
 
-  if (typeof opts === &#x27;function&#x27;) {
+  if (typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
@@ -1178,7 +1171,7 @@ function hasStarted() {
     opts.drivers = defaultConfig.drivers;
   }
 
-  if (process.platform !== &#x27;win32&#x27;) {
+  if (process.platform !== 'win32') {
     delete opts.drivers.ie;
   }
   expectedRequests = Object.keys(opts.drivers).length + 1;
@@ -1189,10 +1182,10 @@ function hasStarted() {
 
   opts.progressCb = opts.progressCb || noop;
 
-  logger(&#x27;----------&#x27;);
-  logger(&#x27;selenium-standalone installation starting&#x27;);
-  logger(&#x27;----------&#x27;);
-  logger(&#x27;&#x27;);
+  logger('----------');
+  logger('selenium-standalone installation starting');
+  logger('----------');
+  logger('');
 
   var fsPaths = computeFsPaths({
     seleniumVersion: opts.version,
@@ -1240,8 +1233,8 @@ function hasStarted() {
 
       // File already exists. Prevent download/installation.
       if (isLatest) {
-        logger(&#x27;---&#x27;);
-        logger(&#x27;File from &#x27; + opts.from + &#x27; has already been downloaded&#x27;);
+        logger('---');
+        logger('File from ' + opts.from + ' has already been downloaded');
         expectedRequests -= 1;
         return cb();
       }
@@ -1268,7 +1261,7 @@ function hasStarted() {
       });
     }
 
-    if (process.platform === &#x27;win32&#x27; &#x26;&#x26; opts.fsPaths.ie) {
+    if (process.platform === 'win32' &amp;&amp; opts.fsPaths.ie) {
       installers.push({
         installer: installIeDr,
         from: opts.urls.ie,
@@ -1299,8 +1292,8 @@ function hasStarted() {
 
       stream
         .pipe(fs.createWriteStream(opts.to))
-        .once(&#x27;error&#x27;, cb.bind(null, new Error(&#x27;Could not write to &#x27; + opts.to)))
-        .once(&#x27;finish&#x27;, cb);
+        .once('error', cb.bind(null, new Error('Could not write to ' + opts.to)))
+        .once('finish', cb);
     });
   }
 
@@ -1314,7 +1307,7 @@ function hasStarted() {
 
   function installFirefoxDr(opts, cb) {
     // only windows build is a zip
-    if (path.extname(opts.from) === &#x27;.zip&#x27;) {
+    if (path.extname(opts.from) === '.zip') {
       installZippedFile(opts.from, opts.to, cb);
     } else {
       installGzippedFile(opts.from, opts.to, cb);
@@ -1325,13 +1318,13 @@ function hasStarted() {
 ### Example
 
 ```js
-var selenium = require(&#x27;selenium-standalone&#x27;);
+var selenium = require('selenium-standalone');
 
 selenium.<span class="apidocCodeKeywordSpan">install</span>({
 // check for more recent versions of selenium here:
 // https://selenium-release.storage.googleapis.com/index.html
-version: &#x27;3.0.1&#x27;,
-baseURL: &#x27;https://selenium-release.storage.googleapis.com&#x27;,
+version: '3.0.1',
+baseURL: 'https://selenium-release.storage.googleapis.com',
 drivers: {
   chrome: {
     // check for more recent versions of chrome driver here:
@@ -1373,9 +1366,9 @@ drivers: {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function start(opts, cb) {
-  debug(&#x27;Start API called with&#x27;, opts);
+  debug('Start API called with', opts);
 
-  if (typeof opts === &#x27;function&#x27;) {
+  if (typeof opts === 'function') {
     cb = opts;
     opts = {};
   }
@@ -1411,13 +1404,13 @@ drivers: {
     basePath: opts.basePath
   });
 
-  if (typeof cb !== &#x27;function&#x27;) {
-    throw new Error(&#x27;You must provide a callback when starting selenium&#x27;);
+  if (typeof cb !== 'function') {
+    throw new Error('You must provide a callback when starting selenium');
   }
 
   // programmatic use, did not give javaPath
   if (!opts.javaPath) {
-    opts.javaPath = which.sync(&#x27;java&#x27;);
+    opts.javaPath = which.sync('java');
   }
 
 <span class="apidocCodeCommentSpan">  /* Command to run selenium is build in the following order:
@@ -1434,22 +1427,22 @@ drivers: {
 </span>  var args = [];
 
   if (fsPaths.chrome) {
-    args.push(&#x27;-Dwebdriver.chrome.driver=&#x27; + fsPaths.chrome.installPath);
+    args.push('-Dwebdriver.chrome.driver=' + fsPaths.chrome.installPath);
   }
 
-  if (process.platform === &#x27;win32&#x27; &#x26;&#x26; fsPaths.ie) {
-    args.push(&#x27;-Dwebdriver.ie.driver=&#x27; + fsPaths.ie.installPath);
+  if (process.platform === 'win32' &amp;&amp; fsPaths.ie) {
+    args.push('-Dwebdriver.ie.driver=' + fsPaths.ie.installPath);
   } else {
     delete fsPaths.ie;
   }
 
   if (fsPaths.firefox) {
-    args.push(&#x27;-Dwebdriver.gecko.driver=&#x27; + fsPaths.firefox.installPath);
+    args.push('-Dwebdriver.gecko.driver=' + fsPaths.firefox.installPath);
   }
 
   args = args.concat(opts.javaArgs);
 
-  args = args.concat([&#x27;-jar&#x27;, fsPaths.selenium.installPath]);
+  args = args.concat(['-jar', fsPaths.selenium.installPath]);
 
   args = args.concat(opts.seleniumArgs);
 
@@ -1460,29 +1453,29 @@ drivers: {
     }
 
     var neverStarted = false;
-    debug(&#x27;Spawning Selenium Server process&#x27;, opts.javaPath, args);
+    debug('Spawning Selenium Server process', opts.javaPath, args);
     var selenium = spawn(opts.javaPath, args, opts.spawnOptions);
 
     opts.spawnCb(selenium);
 
-    selenium.on(&#x27;exit&#x27;, errorIfNeverStarted);
+    selenium.on('exit', errorIfNeverStarted);
 
     checkStarted(args, function started(err) {
       process.nextTick(function() {
         // Add empty handler to stdout and stderr so the buffers can be flushed
         // otherwise the process would eat up memory for nothing and crash
         // we add it here so that users can register their own listeners
-        if (selenium.stdout &#x26;&#x26; selenium.stderr) {
-          if (selenium.stdout.listeners(&#x27;data&#x27;).length === 0) {
-            selenium.stdout.on(&#x27;data&#x27;, noop);
+        if (selenium.stdout &amp;&amp; selenium.stderr) {
+          if (selenium.stdout.listeners('data').length === 0) {
+            selenium.stdout.on('data', noop);
           }
-          if (selenium.stderr.listeners(&#x27;data&#x27;).length === 0) {
-            selenium.stderr.on(&#x27;data&#x27;, noop);
+          if (selenium.stderr.listeners('data').length === 0) {
+            selenium.stderr.on('data', noop);
           }
         }
       });
 
-      selenium.removeListener(&#x27;exit&#x27;, errorIfNeverStarted);
+      selenium.removeListener('exit', errorIfNeverStarted);
 
       if (err) {
         cb(err);
@@ -1499,16 +1492,16 @@ drivers: {
 
       var errorMsg;
       if (code === 1) {
-        errorMsg = &#x27;Selenium server did not start.\n&#x27;;
+        errorMsg = 'Selenium server did not start.\n';
       } else {
-       errorMsg = &#x27;Selenium exited before it could start\n&#x27;;
+       errorMsg = 'Selenium exited before it could start\n';
       }
-      errorMsg += &#x27;Another Selenium process may already be running or your java version may be out of date.\n&#x27;;
+      errorMsg += 'Another Selenium process may already be running or your java version may be out of date.\n';
 
       // TODO: Is there a way to get this info from the api?
       // 3.x requires Java 8+, 2.47.0+ requires Java 7 - 7 is also end-of-life apparently ?
-      errorMsg += &#x27;Be sure to check the official Selenium release notes for minimum required java version: https://raw.githubusercontent
-.com/SeleniumHQ/selenium/master/java/CHANGELOG\n&#x27;;
+      errorMsg += 'Be sure to check the official Selenium release notes for minimum required java version: https://raw.githubusercontent
+.com/SeleniumHQ/selenium/master/java/CHANGELOG\n';
 
       cb(new Error(errorMsg));
     }
@@ -1543,3 +1536,4 @@ By default all drivers are loaded, you only control and change the versions or a
     ]
 </div>
 </div>
+</body></html>
