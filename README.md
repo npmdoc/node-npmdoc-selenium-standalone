@@ -1,6 +1,6 @@
 # npmdoc-selenium-standalone
 
-#### api documentation for  [selenium-standalone (v6.2.0)](https://github.com/vvo/selenium-standalone)  [![npm package](https://img.shields.io/npm/v/npmdoc-selenium-standalone.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-selenium-standalone) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-selenium-standalone.svg)](https://travis-ci.org/npmdoc/node-npmdoc-selenium-standalone)
+#### basic api documentation for  [selenium-standalone (v6.4.1)](https://github.com/vvo/selenium-standalone)  [![npm package](https://img.shields.io/npm/v/npmdoc-selenium-standalone.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-selenium-standalone) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-selenium-standalone.svg)](https://travis-ci.org/npmdoc/node-npmdoc-selenium-standalone)
 
 #### installs a `selenium-standalone` command line to install and start a standalone selenium server
 
@@ -60,10 +60,10 @@
     },
     "directories": {},
     "dist": {
-        "shasum": "6977642769de23f3b5ddce880a93fe1cf220fe01",
-        "tarball": "https://registry.npmjs.org/selenium-standalone/-/selenium-standalone-6.2.0.tgz"
+        "shasum": "54288d4deae2909d251651964bebedc5f7adc66a",
+        "tarball": "https://registry.npmjs.org/selenium-standalone/-/selenium-standalone-6.4.1.tgz"
     },
-    "gitHead": "12eb9ef8ef2aea2e9140d13b8b21ba6e102fb594",
+    "gitHead": "ef9442c21ec9e35d6c9b00e484f3229f6e2c4265",
     "homepage": "https://github.com/vvo/selenium-standalone",
     "license": "MIT",
     "main": "index.js",
@@ -96,7 +96,7 @@
     "scripts": {
         "test": "./bin/selenium-standalone install && mocha"
     },
-    "version": "6.2.0"
+    "version": "6.4.1"
 }
 ```
 

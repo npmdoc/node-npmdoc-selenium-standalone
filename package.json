@@ -1,7 +1,7 @@
 {
     "author": "kai zhu <kaizhu256@gmail.com>",
     "buildNpmdoc": "selenium-standalone",
-    "description": "#### api documentation for  [selenium-standalone (v6.2.0)](https://github.com/vvo/selenium-standalone)  [![npm package](https://img.shields.io/npm/v/npmdoc-selenium-standalone.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-selenium-standalone) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-selenium-standalone.svg)](https://travis-ci.org/npmdoc/node-npmdoc-selenium-standalone)",
+    "description": "#### basic api documentation for  [selenium-standalone (v6.4.1)](https://github.com/vvo/selenium-standalone)  [![npm package](https://img.shields.io/npm/v/npmdoc-selenium-standalone.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-selenium-standalone) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-selenium-standalone.svg)](https://travis-ci.org/npmdoc/node-npmdoc-selenium-standalone)",
     "devDependencies": {
         "electron-lite": "kaizhu256/node-electron-lite#alpha",
         "selenium-standalone": "*",
@@ -36,5 +36,5 @@
         "start": "(set -e; export PORT=${PORT:-8080}; utility2 start test.js)",
         "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
     },
-    "version": "0.0.3"
+    "version": "2017.4.26"
 }
